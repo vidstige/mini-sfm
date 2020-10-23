@@ -1,2 +1,4 @@
 numpy
-bokeh
+matplotlib
+plotly
+jupyter
