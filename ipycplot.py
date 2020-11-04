@@ -15,9 +15,7 @@ def transform(transform, points):
     """Transforms the points, by first homogenizing them and dehomogenize them after"""
     return dehomogenize(transform @ homogenize(points.T)).T
     
-def stroke_line(canvas, p1, p2, scale, translation):
-    p1 = scale * p1 + translation
-    p2 = scale * p2 + translation
+def stroke_line(canvas, p1, p2):
     canvas.stroke_line(p1[0], p1[1], p2[0], p2[1])
 
 def pairwise(iterable):
@@ -27,21 +25,22 @@ def pairwise(iterable):
 
 def stroke_lines(canvas, mvp, lines, scale=None, translation=None):
     # project with camera
-    transformed_lines = dehomogenize(mvp @ homogenize(lines.T)).T
+    transformed_lines = scale * dehomogenize(mvp @ homogenize(lines.T)).T + translation
 
     with hold_canvas(canvas):
         for p1, p2 in pairwise(transformed_lines):
-            stroke_line(canvas, p1, p2, scale, translation)
+            stroke_line(canvas, p1, p2)
 
 
 def rectangle(width, height):
     """Create lines for a rectangle"""
-    return np.array([
-        [0, 0, 0], [width, 0, 0],
-        [width, 0, 0], [width, height, 0],
-        [width, height, 0], [0, height, 0],
-        [0, height, 0], [0, 0, 0],
+    r = np.array([
+        [0, 0, 0], [1, 0, 0],
+        [1, 0, 0], [1, 1, 0],
+        [1, 1, 0], [0, 1, 0],
+        [0, 1, 0], [0, 0, 0],
     ])
+    return (r - np.array([0.5, 0.5, 0])) * np.array([width, height, 1])
 
 
 class Camera:
