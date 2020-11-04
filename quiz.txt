@@ -1,0 +1,15 @@
+In the recovered structure, correct scale measurements can be taken
+* Always
+* Only if the cameras are calibrated
+* Never
+
+The Fundamental Matrix
+* Describes physical properties of the camera
+* Has rank 2
+* Has 6 degrees of freedom
+
+The Calibration Matrix
+* Describes the lens distortion
+* Gives the position of the camera
+* Stays the same regardless of the orientation of the camera
+
