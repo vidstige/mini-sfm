@@ -32,7 +32,7 @@ def stroke_lines(canvas, mvp, lines, scale=None, translation=None):
             stroke_line(canvas, p1, p2)
 
 
-def rectangle(width, height):
+def rectangle(width, height, center=np.array([0, 0, 0])):
     """Create lines for a rectangle"""
     r = np.array([
         [0, 0, 0], [1, 0, 0],
@@ -40,7 +40,7 @@ def rectangle(width, height):
         [1, 1, 0], [0, 1, 0],
         [0, 1, 0], [0, 0, 0],
     ])
-    return (r - np.array([0.5, 0.5, 0])) * np.array([width, height, 1])
+    return (r - center) * np.array([width, height, 1])
 
 
 class Camera:
@@ -72,11 +72,17 @@ class Plot3D:
         self.scale = np.array([1, 1, 1])
         self.translation = np.array([self.canvas.width/2, self.canvas.height/2, 0])
     
-    def points(self, points, size=10):
+    def rects(self, points, size=10):
         transformed = transform(self.camera.mvp(), points) * self.scale + self.translation
         x = transformed[:, 0] 
         y = transformed[:, 1]
         self.canvas.fill_rects(x, y, size)
+    
+    def circles(self, points, size=10):
+        transformed = transform(self.camera.mvp(), points) * self.scale + self.translation
+        x = transformed[:, 0] 
+        y = transformed[:, 1]
+        self.canvas.stroke_circles(x, y, size)
         
     def lines(self, lines):
         stroke_lines(self.canvas, self.camera.mvp(), lines, self.scale, self.translation)
