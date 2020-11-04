@@ -5,7 +5,8 @@ import numpy as np
 
 def normalized(a, axis=-1, order=2):
     n = np.atleast_1d(np.linalg.norm(a, order, axis))
-    return np.divide(a, n, axis=axis)
+    #return np.divide(a, n, axis=axis)
+    return a / n
 
 
 def ortho(l, r, b, t, n, f):
