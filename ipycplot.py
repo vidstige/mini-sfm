@@ -24,6 +24,7 @@ def pairwise(iterable):
     return zip(tmp, tmp)
 
 def stroke_lines(canvas, mvp, lines, scale=None, translation=None):
+    """Lines is a 2n x 3 matrix with start and end points interleaved"""
     # project with camera
     transformed_lines = scale * dehomogenize(mvp @ homogenize(lines.T)).T + translation
 
@@ -92,8 +93,17 @@ class Plot3D:
 
     
 class Plot2D:
-    def __init__(self, canvas):
+    def __init__(self, canvas=None):
         self.canvas = canvas or RoughCanvas()
+        self.scale = np.array([1, 1])
+        self.translation = np.array([0, 0])
+
+    def lines(self, lines):
+        with hold_canvas(self.canvas):
+            for p1, p2 in pairwise(lines * self.scale + self.translation):
+                self.canvas.stroke_line(
+                    p1[0], p1[1],
+                    p2[0], p2[1])
 
     def show(self):
         return self.canvas
