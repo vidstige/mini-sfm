@@ -1,4 +1,5 @@
 numpy
+scipy  # for rq decomposition
 matplotlib
 plotly
 jupyter
