@@ -105,6 +105,9 @@ class Plot2D:
                     p1[0], p1[1],
                     p2[0], p2[1])
 
+    def image(self, im):
+        self.canvas.put_image_data(im, 0, 0)
+
     def show(self):
         return self.canvas
 
